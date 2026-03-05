@@ -7,58 +7,76 @@ export default function HomeScreen() {
   const botoes = [
     ["7", "8", "9", "/", "*"],
     ["4", "5", "6", "-", "+"],
-    ["1", "2", "3", "√", "mod"],
-    [".", "0", "=", "<-", "C"]
+    ["1", "2", "3", "√", "C"],
+    [".", "0", "=", "<-"]
   ]
   
   const [display, setDisplay] = useState("");
-  const [numero, setNumero] = useState(0);
-  const [operador, setOperador] = useState("");
-  
-
+  const [expressao, setExpressao] = useState("");
 
   function limparDisplay() {
     setDisplay("");
+    setExpressao("");
   }
 
   function deletarUltimo() {
     setDisplay(display.slice(0, -1));
+
   }
 
   function calcular(valor: string) {
 
-    //limpamtudo
-    if(valor === "C"){
-      limparDisplay();
-      return;
-    }
+    switch(valor) {
+
+      case "C":
+        limparDisplay();
+        return;
+
+      case "<-":
+        deletarUltimo();
+        return;
+
+      case "+":
+      case "-":
+      case "*":
+      case "/":
+        if (display === "") return;
+
+        //bagulho chato esse prev
+        setExpressao(prev => prev + display + valor);
+        setDisplay("");
+        return;
+
+      case "√":
+        if (display === "") return;
+
+        const resultadoRaiz = Math.sqrt(Number(display));
+        setDisplay(String(resultadoRaiz));
+        return;
+
+      case "=":
+        if (display === "" && expressao === "") return;
+
+        
+        const resultado = eval(expressao + display);
+        setDisplay(String(resultado));
+        setExpressao(expressao + "=" + resultado); 
     
-    //deleta um em um
-    if(valor === "<-"){ 
-      deletarUltimo();
-      return;
+        return;
+
+      default:
+        setDisplay(prev => prev + valor);
     }
-
-    //escreve numero no display
-    if(!isNaN(Number(valor)) || valor === "."){
-      setDisplay(display + valor);
-      return;
-    }
-
-    if(valor === "+" || valor === "-" || valor === "*" || valor === "/" || valor === "mod"){
-      setNumero(Number(display));
-      setOperador(valor);
-      setDisplay("");
-    }
-
-
-  }
+}
 
 
   return (
     <View style={styles.container}>
       
-      <View style={styles.display}>
+      <View style={styles.expressaoDisplay}>
+        <Text style={styles.expressaoText}>{expressao || "0"}</Text>
+      </View>
+      <View style={styles.display}>      
         <Text style={styles.displayText}>{display || "0"}</Text>
       </View>
 
@@ -92,21 +110,34 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   display: {
-    width: "25%",
+    width: "35%",
     backgroundColor:"red", 
     justifyContent: "center",
     alignItems: "flex-end",
-    borderRadius: 5,
     paddingRight: 10,
-    
+    borderRadius: 2
   },
   displayText: {
     fontSize: 40,
     color: "#000000",
   },
+  expressaoDisplay: {
+    width: "35%",
+    height: 50,
+    backgroundColor:"#cfc1c1", 
+    justifyContent: "center",
+    alignItems: "flex-end",
+    paddingRight: 10,  
+    margin: 2,
+    borderRadius: 2,
+  },
+  expressaoText: {
+    fontSize: 20,
+    color: "#000000",
+  },
   gridBox: {
-    width: "25%",
-    aspectRatio: 1,
+    width: "35%",
+    aspectRatio: 0.9,
     alignSelf: "center",
   },
   botao: {
