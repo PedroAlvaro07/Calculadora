@@ -74,10 +74,10 @@ export default function HomeScreen() {
     <View style={styles.container}>
       
       <View style={styles.expressaoDisplay}>
-        <Text style={styles.expressaoText}>{expressao || "0"}</Text>
+        <Text numberOfLines={2} style={styles.expressaoText}>{expressao || "0"}</Text>
       </View>
       <View style={styles.display}>      
-        <Text style={styles.displayText}>{display || "0"}</Text>
+        <Text numberOfLines={2} style={styles.displayText}>{display || "0"}</Text>
       </View>
 
     
@@ -120,6 +120,7 @@ const styles = StyleSheet.create({
   displayText: {
     fontSize: 40,
     color: "#000000",
+    textAlign: "right",
   },
   expressaoDisplay: {
     width: "35%",
@@ -134,6 +135,7 @@ const styles = StyleSheet.create({
   expressaoText: {
     fontSize: 20,
     color: "#000000",
+    textAlign: "right",
   },
   gridBox: {
     width: "35%",
